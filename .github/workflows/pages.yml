@@ -1,0 +1,47 @@
+# Serve version.json and the privacy policy over GitHub Pages.
+#
+# The app tries the Pages URL before the raw.githubusercontent one, because
+# Pages looks official and survives a corporate proxy that dislikes raw
+# GitHub. The raw URL keeps working with no Pages at all, so this is the
+# nicer of two paths rather than a load-bearing one.
+#
+# `enablement: true` turns Pages on through the API the first time this runs,
+# which is why the setting did not have to be found in the web interface.
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install markdown
+      # One source of truth: privacy.md is what a person edits and what
+      # renders on GitHub, and this turns it into the page a Chrome Web Store
+      # reviewer opens. Two hand-maintained copies would drift, and the one
+      # that drifts is always the one being read.
+      - name: Render
+        run: python3 build.py
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
