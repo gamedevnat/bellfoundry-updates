@@ -1,0 +1,140 @@
+<!--
+  GENERATED. The source is docs/privacy-extension.md in gamedevnat/bellfoundry.
+  Edit it there, then regenerate here:
+
+    pip install markdown
+    python3 -c "import markdown,pathlib; \
+      print(markdown.markdown(pathlib.Path('privacy-extension.md').read_text(), \
+      extensions=['tables']))"
+
+  and paste the body back between <main> and </main>. It changes about once a
+  year; a build pipeline for that would be more machinery than the file.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy — Bellfoundry extension</title>
+<style>
+  :root { color-scheme: light dark; --ink:#1f1a24; --paper:#ece5da; --rule:#b9b3bd; --dim:#5c5566; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ece5da; --paper:#1f1a24; --rule:#3a3342; --dim:#b9b3bd; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:16px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:44rem; margin:0 auto; padding-block:3rem 5rem; padding-inline:1rem; }
+  h1 { font-size:1.7rem; line-height:1.2; margin:0 0 .35rem; }
+  h2 { font-size:1.1rem; margin:2.25rem 0 .5rem; }
+  p, li { max-width:38rem; }
+  table { border-collapse:collapse; width:100%; display:block; overflow-x:auto; margin:1rem 0; }
+  th,td { text-align:left; padding:.5rem .9rem .5rem 0; border-bottom:1px solid var(--rule);
+           vertical-align:top; }
+  code { font-size:.9em; word-break:break-word; }
+  img { max-width:100%; }
+  hr { border:0; border-top:1px solid var(--rule); margin:2.5rem 0 1.25rem; }
+  a { color:inherit; }
+  em:first-of-type { color:var(--dim); }
+  .sub { color:var(--dim); }
+</style>
+</head>
+<body><main>
+<h1>Privacy policy — Bellfoundry browser extension</h1>
+<p><em>Last updated: 10 September 2026. Applies to the extension "Bellfoundry —
+Claude session watcher" and to no other software.</em></p>
+<h2>The short version</h2>
+<p>The extension sends what it reads to one address: <code>http://127.0.0.1</code> on the
+same computer it is running on. That address is your own machine and cannot
+be reached from anywhere else. Nothing is sent to us, because there is no
+"us" to send it to — Bellfoundry has no server, no account and no analytics.</p>
+<p>We do not collect, store, transmit, sell or share any of your data, because
+none of it ever reaches us.</p>
+<h2>What the extension reads</h2>
+<p>On <code>claude.ai</code> pages only, it reads the data the page is already fetching for
+itself, and takes from it:</p>
+<ul>
+<li><strong>Session and conversation identifiers</strong> — the opaque ids claude.ai uses,
+  such as <code>session_01ABC…</code> or a conversation UUID.</li>
+<li><strong>Titles</strong> — the name shown on a session row or chat, truncated to 80
+  characters.</li>
+<li><strong>State</strong> — whether something is working, waiting for you, or finished.</li>
+<li><strong>Timing</strong> — when a session was last active, and when a chat's response
+  stream opened and closed.</li>
+<li><strong>Which model answered</strong> — for example <code>claude-opus-5</code>.</li>
+<li><strong>The account label</strong> — the display name or email the page shows for the
+  signed-in account, used only to label which of your accounts a row came
+  from when you use more than one.</li>
+<li><strong>Token counts</strong> — only if claude.ai happens to expose them to the page. It
+  usually does not, and then nothing of the sort is read.</li>
+</ul>
+<h2>What it never reads</h2>
+<p><strong>Message content.</strong> Not your prompts, not Claude's replies, not code, not
+file names, not diffs, not attachments. The extension does not extract them
+and does not transmit them.</p>
+<p>This matters more here than for the rest of Bellfoundry, because a content
+script running on claude.ai <em>could</em> see all of it. The limit is a deliberate
+one, and the source is short enough to check: <code>extension/src/inject.js</code> and
+<code>extension/src/reader.js</code>, published at
+<a href="https://github.com/gamedevnat/bellfoundry">https://github.com/gamedevnat/bellfoundry</a>.</p>
+<h2>Where it goes</h2>
+<p>To <code>http://127.0.0.1:&lt;port&gt;/event</code>, where the Bellfoundry desktop application
+is listening. <code>127.0.0.1</code> is the loopback address: traffic to it never leaves
+your computer and cannot be routed to another machine.</p>
+<p>The extension makes no other network request. It contacts no analytics
+service, no error reporter, no update server and no site of ours.</p>
+<p>If Bellfoundry is not running, the request fails and the extension does
+nothing about it. There is no queue, no retry to elsewhere, and no fallback
+destination.</p>
+<h2>What is stored, and where</h2>
+<p>In your browser's own extension storage, on your computer:</p>
+<ul>
+<li><strong>Settings</strong> — the port number and whether the extension is enabled.</li>
+<li><strong>The last state it reported</strong> for each session, so that reloading a tab
+  does not re-announce chats that have not changed.</li>
+</ul>
+<p>That is all, and it never leaves the browser. Removing the extension removes
+it. Anything the desktop application keeps is covered by Bellfoundry's own
+privacy documentation and is likewise local to your machine.</p>
+<h2>Permissions, and why each exists</h2>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://claude.ai/*</code></td>
+<td>The only site the extension reads. It cannot see any other site.</td>
+</tr>
+<tr>
+<td><code>http://127.0.0.1/*</code></td>
+<td>To deliver events to the Bellfoundry application on your own computer.</td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td>To remember your port setting and the last reported state.</td>
+</tr>
+<tr>
+<td><code>alarms</code></td>
+<td>To re-check periodically when a page has been open a long time.</td>
+</tr>
+</tbody>
+</table>
+<h2>Children</h2>
+<p>Bellfoundry is a developer tool and is not directed at children. It does not
+knowingly collect information from anyone, of any age, because it does not
+collect information.</p>
+<h2>Changes</h2>
+<p>If this policy ever changes, the updated version will be published at this
+address and the date at the top will change. Because the extension transmits
+nothing to us, no change here can retroactively affect data we hold; we hold
+none.</p>
+<h2>Contact</h2>
+<p>Open an issue at <a href="https://github.com/gamedevnat/bellfoundry/issues">https://github.com/gamedevnat/bellfoundry/issues</a>.</p>
+<hr />
+<p><em>Bellfoundry is not affiliated with or endorsed by Anthropic.</em></p>
+</main></body>
+</html>
