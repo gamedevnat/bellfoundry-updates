@@ -1,5 +1,7 @@
 {
   "version": "0.2.9",
   "url": "https://connectioneering.itch.io/bellfoundry",
-  "notes": "Read only when someone presses Check for updates. Nothing is downloaded automatically."
+  "download": "https://raw.githubusercontent.com/gamedevnat/bellfoundry-updates/main/releases/v0.2.9/Bellfoundry-Free-Setup.exe",
+  "sha256": "cac7be169aab54de34ac55d076791c72e7a10ad3b93f1ee6149bffefff7f3939",
+  "notes": "Read only when someone presses Check for updates. The download is fetched and checked against sha256 before anything is run."
 }
